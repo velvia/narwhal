@@ -570,7 +570,7 @@ impl BlockSynchronizer {
     /// logic of waiting and gathering the replies from the primary nodes
     /// for the payload availability. This future is returning the next State
     /// to be executed.
-    #[instrument(level="trace", skip_all, fields(num_certificates = certificates.len()))]
+    #[instrument(level="trace", skip_all, fields(num_certificates = certificates.len(), first_cert =? certificates.get(0).map(|c| c.header.id)))]
     async fn handle_synchronize_block_payload_command<'a>(
         &mut self,
         certificates: Vec<Certificate>,

@@ -393,7 +393,7 @@ impl<SynchronizerHandler: Handler + Send + Sync + 'static> BlockWaiter<Synchroni
         }
     }
 
-    #[instrument(level="debug", skip_all, fields(num_block_ids = ids.len()))]
+    #[instrument(level="debug", skip_all, fields(num_block_ids = ids.len(), first_block =? ids.get(0)))]
     async fn handle_get_blocks_command<'a>(
         &mut self,
         ids: Vec<CertificateDigest>,
@@ -447,7 +447,7 @@ impl<SynchronizerHandler: Handler + Send + Sync + 'static> BlockWaiter<Synchroni
     /// fetch it via the peers. Otherwise if available on the storage
     /// should return the result immediately. The method is blocking to
     /// retrieve all the results.
-    #[instrument(level = "trace", skip_all, fields(num_certificate_ids = ids.len()))]
+    #[instrument(level = "trace", skip_all, fields(num_certificate_ids = ids.len(), first_id =? ids.get(0)))]
     async fn get_certificates(
         &mut self,
         ids: Vec<CertificateDigest>,

@@ -143,7 +143,7 @@ impl Core {
         })
     }
 
-    #[instrument(level = "debug", skip_all)]
+    #[instrument(level = "debug", skip_all, fields(id =? header.id, round =? header.round))]
     async fn process_own_header(&mut self, header: Header) -> DagResult<()> {
         if header.epoch < self.committee.epoch() {
             debug!("Proposer outdated");
@@ -177,7 +177,7 @@ impl Core {
     }
 
     #[async_recursion]
-    #[instrument(level = "debug", skip_all)]
+    #[instrument(level = "debug", skip_all, fields(id =? header.id, round =? header.round))]
     async fn process_header(&mut self, header: &Header) -> DagResult<()> {
         debug!("Processing {:?} round:{:?}", header, header.round);
         let header_source = if self.name.eq(&header.author) {
@@ -302,7 +302,7 @@ impl Core {
     }
 
     #[async_recursion]
-    #[instrument(level = "debug", skip_all)]
+    #[instrument(level = "debug", skip_all, fields(id =? vote.id))]
     async fn process_vote(&mut self, vote: Vote) -> DagResult<()> {
         debug!("Processing {:?}", vote);
 
@@ -343,7 +343,7 @@ impl Core {
     }
 
     #[async_recursion]
-    #[instrument(level = "debug", skip_all)]
+    #[instrument(level = "debug", skip_all, fields(id =? certificate.header.id))]
     async fn process_certificate(&mut self, certificate: Certificate) -> DagResult<()> {
         debug!(
             "Processing {:?} round:{:?}",
